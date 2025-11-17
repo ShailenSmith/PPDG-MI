@@ -465,7 +465,7 @@ if __name__ == '__main__':
     # Define and parse attack arguments
     parser = create_parser()
     config, args = parse_arguments(parser)
-
+    import pdb; pdb.set_trace()
     lpips_loss = LPIPS(net=config.tuneG['lpips_type']).to(device).eval()
 
     torch.set_num_threads(24)
@@ -563,6 +563,7 @@ if __name__ == '__main__':
                 break
 
             # step3: tune generator
+            print(f"round {round_num + 1} -- target {target_id}: tune generator G...")
             pp_ws = final_w[:config.tuneG['num_inv_points']].to(device)
             pp_data = create_image(
                 pp_ws,
@@ -707,6 +708,7 @@ if __name__ == '__main__':
                 )
 
             step_3_2_time = time.time() - start_time
+            print(f"Round {round_num + 1} -- target {target_id}: done tuning G.")
             time_cost_list = [['target', 'mi', 'selection', 'step_3_1', 'step_3_2'],
                               [target_id, time_list[0], time_list[1], step_3_1_time, step_3_2_time]]
 
@@ -762,17 +764,17 @@ if __name__ == '__main__':
                         dims=2048,
                         num_workers=8,
                         gpu_devices=gpu_devices)
-            precision, recall, density, coverage = prdc.compute_metric(
-                num_classes=config.num_classes, k=3, rtpt=rtpt)
+            # precision, recall, density, coverage = prdc.compute_metric( #! commented this out since it has a bug
+            #     num_classes=config.num_classes, k=3, rtpt=rtpt)
 
-            print(
-                f' Precision: {precision:.4f}, Recall: {recall:.4f}, Density: {density:.4f}, Coverage: {coverage:.4f}'
-            )
-            if config.logging:
-                prdc_list = [['precision', 'recall', 'density', 'coverage'],
-                             [precision, recall, density, coverage]]
-                _ = write_list(
-                    f'results/{current_time}/prdc_list_r{i + 1}', prdc_list)
+            # print(
+            #     f' Precision: {precision:.4f}, Recall: {recall:.4f}, Density: {density:.4f}, Coverage: {coverage:.4f}'
+            # )
+            # if config.logging:
+            #     prdc_list = [['precision', 'recall', 'density', 'coverage'],
+            #                  [precision, recall, density, coverage]]
+            #     _ = write_list(
+            #         f'results/{current_time}/prdc_list_r{i + 1}', prdc_list)
             # compute FID score
             fid_evaluation = FID_Score(training_dataset,
                                        attack_dataset,
@@ -783,15 +785,15 @@ if __name__ == '__main__':
                                        dims=2048,
                                        num_workers=8,
                                        gpu_devices=gpu_devices)
-            fid_score = fid_evaluation.compute_fid(rtpt)
-            print(
-                f'FID score computed on {final_w.shape[0]} attack samples and {config.dataset}: {fid_score:.4f}'
-            )
-            if config.logging:
-                prdc_list = [['fid', 'precision', 'recall', 'density', 'coverage'],
-                             [fid_score, precision, recall, density, coverage]]
-                _ = write_list(
-                    f'results/{current_time}/prdc_list_r{i + 1}', prdc_list)
+            # fid_score = fid_evaluation.compute_fid(rtpt)
+            # print(
+            #     f'FID score computed on {final_w.shape[0]} attack samples and {config.dataset}: {fid_score:.4f}'
+            # )
+            # if config.logging:
+            #     prdc_list = [['fid', 'precision', 'recall', 'density', 'coverage'],
+            #                  [fid_score, precision, recall, density, coverage]]
+            #     _ = write_list(
+            #         f'results/{current_time}/prdc_list_r{i + 1}', prdc_list)
 
         except Exception:
             print(traceback.format_exc())
