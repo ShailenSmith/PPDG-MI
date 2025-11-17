@@ -15,22 +15,22 @@ evaluation_model:
 
 
 candidates:
-  num_candidates: 100
+  num_candidates: 25
   candidate_search:
-    search_space_size: 500
+    search_space_size: 100
     center_crop: 800
     resize: 224
     horizontal_flip: true
-    batch_size: 25
+    batch_size: 15
     truncation_psi: 0.5
     truncation_cutoff: 8
 
 
 attack:
   num_round: 2
-  batch_size: 20
+  batch_size: 15
   num_epochs: 0
-  targets: 0-100
+  targets: 0-2
   discriminator_loss_weight: 0.0
   single_w: true
   clip: false
@@ -54,7 +54,7 @@ attack:
 
 
 final_selection:
-  samples_per_target: 100
+  samples_per_target: 10
   approach: transforms
   iterations: 100
 
@@ -72,8 +72,8 @@ tuneG:
   pt_lpips_lambda: 1
   dist_lambda: 1
   # Steps
-  inv_steps: 300
-  tune_steps: 150
+  inv_steps: 10
+  tune_steps: 5
   # Optimization
   inv_learning_rate: 0.005
   tune_learning_rate: 0.0003
