@@ -29,16 +29,33 @@ class AttackConfigParser:
             model = Classifier(num_classes=config['num_classes'],
                                architecture=config['architecture'])
             # model.load_state_dict(torch.load(config['weights']))
+            
+            
+            tmp_pre_dict = torch.load(config['weights'])
+            # import pdb; pdb.set_trace()
+            normally = False
+            if normally:
+                tmp = tmp_pre_dict['model_state_dict']
+                new_state_dict = {}
+                for key in tmp:
+                    new_key = key.replace('model._orig_mod.', 'model.')
+                    new_state_dict[new_key] = tmp[key]
 
-            tmp = torch.load(config['weights'])['model_state_dict']
-            new_state_dict = {}
-            for key in tmp:
-                new_key = key.replace('model._orig_mod.', 'model.')
-                new_state_dict[new_key] = tmp[key]
+                model.load_state_dict(new_state_dict)
 
-            model.load_state_dict(new_state_dict)
+                model.wandb_name = None
+            else: # for when tmp_pre_dict has a feature_extractor and classification_layer that need to be combined for self.model
+                new_state_dict = {}
+                new_state_dict['model'] = {}
+                for key, value in tmp_pre_dict['feature_extractor'].items():
+                    new_state_dict['model.' + key] = value
+                for key, value in tmp_pre_dict['classification_layer'].items():
+                    new_state_dict['model.fc.' + key] = value
 
-            model.wandb_name = None
+                # pdb.set_trace()
+                model.load_state_dict(new_state_dict)
+
+                model.wandb_name = None
         else:
             raise RuntimeError('No target model stated in the config file.')
 
@@ -58,16 +75,27 @@ class AttackConfigParser:
         if 'wandb_evaluation_run' in self._config:
             evaluation_model = load_model(self._config['wandb_evaluation_run'])
         elif 'evaluation_model' in self._config:
+
             config = self._config['evaluation_model']
             evaluation_model = Classifier(num_classes=config['num_classes'],
                                           architecture=config['architecture'])
             # evaluation_model.load_state_dict(torch.load(config['weights']))
-            tmp = torch.load(config['weights'])['model_state_dict']
-            new_state_dict = {}
-            for key in tmp:
-                new_key = key.replace('model._orig_mod.', 'model.')
-                new_state_dict[new_key] = tmp[key]
-
+            tmp_pre_dict = torch.load(config['weights'])
+            # import pdb; pdb.set_trace()
+            normally = False
+            if normally:
+                tmp = tmp_pre_dict['model_state_dict']
+                new_state_dict = {}
+                for key in tmp:
+                    new_key = key.replace('model._orig_mod.', 'model.')
+                    new_state_dict[new_key] = tmp[key]
+            else: 
+                new_state_dict = {}
+                new_state_dict['model'] = {}
+                for key, value in tmp_pre_dict['feature_extractor'].items():
+                    new_state_dict['model.' + key] = value
+                for key, value in tmp_pre_dict['classification_layer'].items():
+                    new_state_dict['model.fc.' + key] = value
             evaluation_model.load_state_dict(new_state_dict)
 
         else:
