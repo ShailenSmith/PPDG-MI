@@ -1,10 +1,7 @@
-import os, sys
-sys.path.append(os.path.join(os.getcwd(), 'PPDG_MI', 'high_resolution'))
-
 import torch
 import torchvision.transforms as T
 # from datasets.celeba import CelebA1000
-from datasets.custom_subset import SingleClassSubset
+from PPDG_MI.high_resolution.datasets.custom_subset import SingleClassSubset
 # from datasets.facescrub import FaceScrub
 # from datasets.stanford_dogs import StanfordDogs
 from torch.utils.data import DataLoader
