@@ -1,9 +1,9 @@
 import torch
 import torchvision.transforms as T
-from datasets.celeba import CelebA1000
+# from datasets.celeba import CelebA1000
 from datasets.custom_subset import SingleClassSubset
-from datasets.facescrub import FaceScrub
-from datasets.stanford_dogs import StanfordDogs
+# from datasets.facescrub import FaceScrub
+# from datasets.stanford_dogs import StanfordDogs
 from torch.utils.data import DataLoader
 from torch.utils.data.dataset import TensorDataset
 from torchvision.transforms.transforms import Resize
