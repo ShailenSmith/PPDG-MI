@@ -47,14 +47,14 @@ def get_subsampled_dataset(dataset,
     return subsample
 
 
-def get_facescrub_idx_to_class():
-    with open('utils/files/facescrub_idx_to_class.pkl', 'rb') as f:
+def get_facescrub_idx_to_class(): #! use the PPA repo one
+    with open('Plug_and_Play_Attacks/utils/files/facescrub_idx_to_class.pkl', 'rb') as f:
         idx_to_class = pickle.load(f)
     return idx_to_class
 
 
 def get_facescrub_class_to_idx():
-    with open('utils/files/facescrub_class_to_idx.pkl', 'rb') as f:
+    with open('Plug_and_Play_Attacks/utils/files/facescrub_class_to_idx.pkl', 'rb') as f:
         class_to_idx = pickle.load(f)
     return class_to_idx
 
@@ -74,13 +74,13 @@ def get_celeba_attr_to_idx(list_attr_file='data/celeba/list_attr_celeba.txt'):
 
 
 def get_stanford_dogs_idx_to_class():
-    with open('utils/files/stanford_dogs_idx_to_class.pkl', 'rb') as f:
+    with open('Plug_and_Play_Attacks/utils/files/stanford_dogs_idx_to_class.pkl', 'rb') as f:
         idx_to_class = pickle.load(f)
     return idx_to_class
 
 
 def get_stanford_dogs_class_to_idx():
-    with open('utils/files/stanford_dogs_class_to_idx.pkl', 'rb') as f:
+    with open('Plug_and_Play_Attacks/utils/files/stanford_dogs_class_to_idx.pkl', 'rb') as f:
         class_to_idx = pickle.load(f)
     return class_to_idx
 
