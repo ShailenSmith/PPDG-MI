@@ -16,7 +16,7 @@ import numpy as np
 import pytorch_fid.fid_score
 import torch
 from pytorch_fid.inception import InceptionV3
-from utils.stylegan import create_image
+from PPDG_MI.high_resolution.utils.stylegan import create_image
 
 IMAGE_EXTENSIONS = ('bmp', 'jpg', 'jpeg', 'pgm', 'png', 'ppm',
                     'tif', 'tiff', 'webp')
