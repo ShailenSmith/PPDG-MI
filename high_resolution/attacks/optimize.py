@@ -1,4 +1,4 @@
-from losses.poincare import poincare_loss
+from PPDG_MI.high_resolution.losses.poincare import poincare_loss
 import math
 
 import numpy as np

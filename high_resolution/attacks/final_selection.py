@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import torchvision.transforms as T
 from torch.utils.data import TensorDataset, DataLoader
 
-from utils.stylegan import create_image
+from PPDG_MI.high_resolution.utils.stylegan import create_image
 
 def scores_by_transform(imgs,
                         targets,

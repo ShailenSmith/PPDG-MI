@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 import wandb
-from losses import l2_loss
+from PPDG_MI.high_resolution.losses import l2_loss
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 

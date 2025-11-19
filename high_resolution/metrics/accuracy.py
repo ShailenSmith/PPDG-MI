@@ -1,6 +1,6 @@
 import torch
 
-from metrics.base_metric import BaseMetric
+from PPDG_MI.high_resolution.metrics.base_metric import BaseMetric
 
 
 class Accuracy(BaseMetric):

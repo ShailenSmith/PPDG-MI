@@ -7,7 +7,7 @@ from PPDG_MI.high_resolution.datasets.custom_subset import SingleClassSubset
 from torch.utils.data import DataLoader
 from torch.utils.data.dataset import TensorDataset
 from torchvision.transforms.transforms import Resize
-from utils.stylegan import create_image
+from PPDG_MI.high_resolution.utils.stylegan import create_image
 
 
 class DistanceEvaluation():
