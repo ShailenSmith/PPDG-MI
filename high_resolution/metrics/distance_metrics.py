@@ -1,3 +1,6 @@
+import os, sys
+sys.path.append(os.path.join(os.getcwd(), 'PPDG_MI', 'high_resolution'))
+
 import torch
 import torchvision.transforms as T
 # from datasets.celeba import CelebA1000
