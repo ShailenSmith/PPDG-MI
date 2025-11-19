@@ -14,7 +14,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from tqdm import tqdm
-import dnnlib
+import PPDG_MI.high_resolution.dnnlib
 import torch.nn as nn
 
 from PPDG_MI.high_resolution.losses import mmd_loss, ct_loss
