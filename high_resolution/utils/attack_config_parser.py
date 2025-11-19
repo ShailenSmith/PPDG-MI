@@ -16,6 +16,8 @@ from models.classifier import Classifier
 import wandb
 from utils.wandb import load_model
 
+import random
+
 
 class AttackConfigParser:
 
@@ -174,21 +176,41 @@ class AttackConfigParser:
         num_candidates = self._config['candidates']['num_candidates']
         if type(target_classes) is list:
             targets = torch.tensor(target_classes)
-            targets = torch.repeat_interleave(targets, num_candidates)
+            # targets = torch.repeat_interleave(targets, num_candidates)
         elif target_classes == 'all':
             targets = torch.tensor([i for i in range(self.model.num_classes)])
-            targets = torch.repeat_interleave(targets, num_candidates)
+            # targets = torch.repeat_interleave(targets, num_candidates)
+
         elif type(target_classes) == int:
-            targets = torch.full(size=(num_candidates,),
-                                 fill_value=target_classes)
-        elif isinstance(target_classes, str) and '-' in target_classes:
-            start, end = map(int, target_classes.split('-'))
-            targets = torch.tensor([i for i in range(start, end)])
-            targets = torch.repeat_interleave(targets, num_candidates)
+            random.seed(self._config['seed'])
+            num_target_classes = target_classes
+            
+            if self.dataset == 'FaceScrub': # get an equal number of men and women for FaceScrub
+                num_men = num_target_classes // 2
+                num_women = num_target_classes - num_men
+                random.seed(self._config['seed'])
+                men_idxs = random.sample(range(0, 265), num_men)
+                women_idxs = random.sample(range(265, 530), num_women)
+                
+                idxs = men_idxs + women_idxs
+            else:
+                print("Warning: Assuming the evaluation model has the same number of classes as the dataset.")
+                n_classes = self._config['evaluation_model']['num_classes']
+                idxs = random.sample(range(0, n_classes), num_target_classes)
+            targets = torch.tensor(idxs)
+            
+        # elif type(target_classes) == int:
+        #     targets = torch.full(size=(num_candidates,),
+        #                          fill_value=target_classes)
+        # elif isinstance(target_classes, str) and '-' in target_classes:
+        #     start, end = map(int, target_classes.split('-'))
+        #     targets = torch.tensor([i for i in range(start, end)])
+        #     targets = torch.repeat_interleave(targets, num_candidates)
         else:
             raise Exception(
                 f' Please specify a target class or state a target vector.')
 
+        targets = torch.repeat_interleave(targets, num_candidates)
         targets = targets.to(device)
         return targets
 
